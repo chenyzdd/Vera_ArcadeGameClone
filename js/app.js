@@ -1,8 +1,12 @@
-// 这是我们的玩家要躲避的敌人 
+
+var CELL_WIDTH = 101;
+var CELL_HEIGHT = 83;
+var TOP_BORDER = 55;
+// 这是我们的玩家要躲避的敌人
 var Enemy = function(y) {
     // 要应用到每个敌人的实例的变量写在这里
-    // 我们已经提供了一个来帮助你实现更多
-    this.x = 83*(Math.floor(Math.random() * 10) % 3) + 60;
+    // 游戏开始时，甲壳虫随机出现的位置，以及以不同的速度移动
+    this.x = CELL_HEIGHT *(Math.floor(Math.random() * 10) % 3) + 60;
     this.y = y;
     this.speed = Math.floor(Math.random()*100)+50;
 
@@ -14,11 +18,11 @@ var Enemy = function(y) {
 // 参数: dt ，表示时间间隙
 Enemy.prototype.update = function(dt) {
     // 你应该给每一次的移动都乘以 dt 参数，以此来保证游戏在所有的电脑上
-    // 都是以同样的速度运行的
+    // 都是以随机的速度运行的
     this.x += dt * this.speed;
 
-    if(this.x >= 505) {
-        this.x = 0;
+    if(this.x >= CELL_WIDTH * 5) {
+        this.x = - CELL_WIDTH;  //超出最右边，甲壳虫重新从左边进入
     }
 };
 
@@ -37,8 +41,8 @@ var Player = function(x, y) {
 };
 
 Player.prototype.update = function() {
-    this.x = 202;
-    this.y = 83 * 4 + 55;
+    this.x = CELL_WIDTH * 2;
+    this.y = CELL_HEIGHT * 4 + TOP_BORDER;
 
 };
 
@@ -48,20 +52,21 @@ Player.prototype.render = function() {
 
 Player.prototype.handleInput = function(movement) {
     switch (movement) {
-        case 'left' : this.x -= 101; break;
-        case 'right' : this.x += 101; break;
-        case 'up' : this.y -= 83; break;
-        case 'down' : this.y += 83; break;
+        case 'left' : this.x -= CELL_WIDTH; break;
+        case 'right' : this.x += CELL_WIDTH; break;
+        case 'up' : this.y -= CELL_HEIGHT; break;
+        case 'down' : this.y += CELL_HEIGHT; break;
     }
-    if(this.x > 404) {
-        this.x = 404;
+    if(this.x > CELL_WIDTH * 4) {
+        this.x = CELL_WIDTH * 4;
     }else if(this.x < 0){
         this.x = 0;
     }
-    if(this.y <= 55) {
-        this.y = 55;
+    if(this.y < TOP_BORDER) {
+        alert("Congratulations,you win!")
+       player.update();
     } else if(this.y >= 470){
-        this.y = 83 * 4 + 55;
+        this.y = CELL_HEIGHT * 4 + TOP_BORDER;
     }
 };
 
@@ -69,12 +74,12 @@ Player.prototype.handleInput = function(movement) {
 // 把所有敌人的对象都放进一个叫 allEnemies 的数组里面
 // 把玩家对象放进一个叫 player 的变量里面
 var allEnemies = [
-    new Enemy(83 * 0 + 55), 
-    new Enemy(83 * 1 + 55), 
-    new Enemy(83 * 2 + 55)
+    new Enemy(CELL_HEIGHT * 0 + TOP_BORDER),
+    new Enemy(CELL_HEIGHT * 1 + TOP_BORDER),
+    new Enemy(CELL_HEIGHT * 2 + TOP_BORDER)
 ]
 
-var player = new Player(202, 83 * 4 + 55)
+var player = new Player(CELL_WIDTH * 2, CELL_HEIGHT * 4 + TOP_BORDER)
 
 // 这段代码监听游戏玩家的键盘点击事件并且代表将按键的关键数字送到 Play.handleInput()
 // 方法里面。你不需要再更改这段代码了。
