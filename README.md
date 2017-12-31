@@ -1,4 +1,4 @@
-# Install
+# Installation
 
 On your computer, you can input the line as below:
 - git clone https://github.com/chenyzdd/Vera_ArcadeGameClone.git
